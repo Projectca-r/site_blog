@@ -7,46 +7,68 @@ from blog.models import *
 
 User = settings.AUTH_USER_MODEL
 
-class CartItem(models.Model):
-    user = models.ForeignKey(User,
-                             null=True,
-                             on_delete=models.SET_NULL,
-                             blank=True)
-    product = {
-        models.OneToOneField(Product_TV,
-                             on_delete=models.SET_NULL,
-                             null=True,
-                             blank=True),
-        models.OneToOneField(Product_Phone,
-                             on_delete=models.SET_NULL,
-                             null=True,
-                             blank=True),
-        models.OneToOneField(Product_a_laptop,
-                             on_delete=models.SET_NULL,
-                             null=True,
-                             blank=True),
-    }
-    boolean = models.BooleanField(default=False)
-    date_added = models.DateTimeField(auto_now=True)
-    date_ordered = models.DateTimeField(null=True)
-
-    def __str__(self):
-        return "{}".format(self.product.title)
-
 
 class Cart(models.Model):
-    product = {
-        models.ManyToManyField(Product_TV, null=True, blank=True),
-        models.ManyToManyField(Product_Phone, null=True, blank=True),
-        models.ManyToManyField(Product_a_laptop, null=True, blank=True)
-    }
-    cartitem = models.ManyToManyField(CartItem,
-                                      blank=True,
-                                      related_name='itemcart')
-    decimal = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
-    date_added = models.DateTimeField(auto_now_add=True, auto_now=False)
-    date_ordered = models.DateTimeField(auto_now_add=False, auto_now=True)
-    active = models.BooleanField(default=True)
+    user        = models.ForeignKey(User, on_delete=True, null=True, blank=True)
+    total       = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    updated     = models.DateTimeField(auto_now=True)
+    timestamp   = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "{}" (self.id)
+        return str(self.id)
+
+
+# =================================================================================
+class Item_TV(models.Model):
+    user        = models.ForeignKey(User,
+                             on_delete=models.SET_NULL,
+                             null=True,
+                             blank=True)
+    product_tv  = models.ManyToManyField(Product_TV,
+                                        blank=True,
+                                        related_name='item_tv')
+    cart        = models.ManyToManyField(Cart, blank=True, related_name='cart_tv')
+    total       = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    updated     = models.DateTimeField(auto_now=True)
+    timestamp   = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self(Product_TV.title)
+
+
+# ==================================================================================
+class Item_Phone(models.Model):
+    user            = models.ForeignKey(User,
+                             on_delete=models.SET_NULL,
+                             null=True,
+                             blank=True)
+    product_phone   = models.ManyToManyField(Product_Phone,
+                                           blank=True,
+                                           related_name='item_phone')
+    cart            = models.ManyToManyField(Cart, blank=True, related_name='cart_phone')
+    total           = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    updated         = models.DateTimeField(auto_now=True)
+    timestamp       = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self(Product_Phone.title)
+
+
+# ===================================================================================
+class Item_a_laptop(models.Model):
+    user                = models.ForeignKey(User,
+                             on_delete=models.SET_NULL,
+                             null=True,
+                             blank=True)
+    product_a_laptop    = models.ManyToManyField(Product_a_laptop,
+                                              blank=True,
+                                              related_name='item_a_laptop')
+    cart                = models.ManyToManyField(Cart,
+                                  blank=True,
+                                  related_name='cart_a_laptop')
+    total               = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    updated             = models.DateTimeField(auto_now=True)
+    timestamp           = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self(Product_a_laptop.title)

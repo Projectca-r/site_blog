@@ -1,7 +1,7 @@
 {% extends 'blog/base_blog.html' %}
 
 {% block title %}
-    {{ category_a_laptop.slug }}
+    {{ category_a_laptop.slug }} - {{ block.super }}
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,8 @@
 </a>
 {% endfor %}
     {% for product_a_laptop in category_a_laptop.a_laptop.all %}
-        <p>{{ mac_os.title }}</p>
+        <p>{{ product_a_laptop.title }}</p>
+        <p>{{ product_a_laptop.slug }}</p>
     {% endfor %}
     
 {% endfor %}
